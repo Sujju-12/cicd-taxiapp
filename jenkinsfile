@@ -8,12 +8,10 @@ pipeline {
             label 'maven'
         }
     }
-
     environment {
         PATH = "/opt/apache-maven-3.9.6/bin:$PATH"
         SONAR_TOKEN = credentials('SONAR_TOKEN')
     }
-
     stages {
         stage("build") {
             steps {
@@ -22,7 +20,6 @@ pipeline {
                 echo "----------- build completed ----------"
             }
         }
-
         stage("test") {
             steps {
                 echo "----------- unit test started ----------"
@@ -30,7 +27,6 @@ pipeline {
                 echo "----------- unit test completed ----------"
             }
         }
-
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -44,7 +40,6 @@ pipeline {
                 }
             }
         }
-
         stage("Jar Publish") {
             steps {
                 script {
@@ -69,7 +64,6 @@ pipeline {
                 }
             }
         }
-
         stage("Docker Build") {
             steps {
                 script {
@@ -79,7 +73,6 @@ pipeline {
                 }
             }
         }
-
         stage("Docker Publish") {
             steps {
                 script {
@@ -91,5 +84,12 @@ pipeline {
                 }
             }
         }
+        stage(" Deploy ") {
+       steps {
+         script {
+            sh './deploy.sh'
+         }
+       }
+     } 
     }
 }
